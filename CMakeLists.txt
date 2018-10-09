@@ -1,5 +1,10 @@
 project(PDFHUMMUS)
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required(VERSION 2.6)
+
+if(PDFHUMMUS_NO_AES)
+    add_compile_definitions(PDFHUMMUS_NO_AES)
+endif(PDFHUMMUS_NO_AES)
+
 if(MSVC AND MSVC_USE_STATIC_RUNTIME)
     string(REPLACE "/MD" "/MT" CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
     set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_CXX_FLAGS_DEBUG})

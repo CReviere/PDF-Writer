@@ -18,6 +18,10 @@ limitations under the License.
 
 
 */
+#ifndef PDFHUMMUS_NO_AES
+ #include "InputAESDecodeStream.h"
+#endif
+
 #include "DecryptionHelper.h"
 #include "PDFParser.h"
 #include "PDFObjectCast.h"
@@ -34,7 +38,6 @@ limitations under the License.
 #include "RefCountPtr.h"
 #include "OutputStringBufferStream.h"
 #include "InputRC4XcodeStream.h"
-#include "InputAESDecodeStream.h"
 #include "Trace.h"
 #include <memory>
 
@@ -460,9 +463,10 @@ void DecryptionHelper::OnObjectEnd(PDFObject* inObject) {
 }
 
 IByteReader* DecryptionHelper::CreateDecryptionReader(IByteReader* inSourceStream, const ByteList& inEncryptionKey, bool inIsUsingAES) {
+   #ifndef PDFHUMMUS_NO_AES
 	if (inIsUsingAES)
 		return new InputAESDecodeStream(inSourceStream, inEncryptionKey);
-	else
+   #endif
 		return new InputRC4XcodeStream(inSourceStream, inEncryptionKey);
 }
 

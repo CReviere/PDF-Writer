@@ -18,13 +18,15 @@ limitations under the License.
 
 
 */
+#ifndef PDFHUMMUS_NO_AES
+ #include "OutputAESEncodeStream.h"
+#endif
 
 #include "EncryptionHelper.h"
 #include "OutputStringBufferStream.h"
 #include "InputStringStream.h"
 #include "OutputStreamTraits.h"
 #include "OutputRC4XcodeStream.h"
-#include "OutputAESEncodeStream.h"
 #include "ObjectsContext.h"
 #include "DictionaryContext.h"
 #include "DecryptionHelper.h"
@@ -126,12 +128,11 @@ IByteWriterWithPosition* EncryptionHelper::CreateEncryptionStream(IByteWriterWit
 }
 
 IByteWriterWithPosition* EncryptionHelper::CreateEncryptionWriter(IByteWriterWithPosition* inToWrapStream, const ByteList& inEncryptionKey, bool inIsUsingAES) {
-	if (inIsUsingAES) {
+   #ifndef PDFHUMMUS_NO_AES
+	if (inIsUsingAES) 
 		return new OutputAESEncodeStream(inToWrapStream, inEncryptionKey, false);
-	}
-	else {
+   #endif
 		return new OutputRC4XcodeStream(inToWrapStream, inEncryptionKey, false);
-	}
 }
 
 
