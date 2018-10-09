@@ -8,8 +8,19 @@ set(PDFWRITER_MINOR 0)
 set(PDFWRITER_LIB_VERSION ${PDFWRITER_MAJOR}.${PDFWRITER_MINOR}.0)
 set(PDFWRITER_SO_VERSION ${PDFWRITER_MAJOR})
 
+# Create a variable to include/exclude AES-related source files
+set(aesSources )
 
-include_directories (${LIBAESGM_INCLUDE_DIRS})
+if(NOT PDFHUMMUS_NO_AES)
+    include_directories (${LIBAESGM_INCLUDE_DIRS})
+
+    list(APPEND aesSources InputAESDecodeStream.h)
+    list(APPEND aesSources InputAESDecodeStream.cpp)
+    list(APPEND aesSources OutputAESEncodeStream.h)
+    list(APPEND aesSources OutputAESEncodeStream.cpp)
+
+endif(NOT PDFHUMMUS_NO_AES)
+
 include_directories (${ZLIB_INCLUDE_DIRS})
 
 if(NOT PDFHUMMUS_NO_DCT)
@@ -36,6 +47,7 @@ endif(NOT PDFHUMMUS_NO_PNG)
 
 add_library (PDFWriter 
 #sources
+${aesSources}
 AbstractContentContext.cpp
 AbstractWrittenFont.cpp
 ANSIFontWriter.cpp
@@ -70,7 +82,6 @@ GraphicState.cpp
 GraphicStateStack.cpp
 IndirectObjectsReferenceRegistry.cpp
 InfoDictionary.cpp
-InputAESDecodeStream.cpp
 InputAscii85DecodeStream.cpp
 InputAsciiHexDecodeStream.cpp
 InputBufferedStream.cpp
@@ -97,7 +108,6 @@ RC4.cpp
 ObjectsContext.cpp
 OpenTypeFileInput.cpp
 OpenTypePrimitiveReader.cpp
-OutputAESEncodeStream.cpp
 OutputBufferedStream.cpp
 OutputFile.cpp
 OutputFileStream.cpp
@@ -239,7 +249,6 @@ ITiledPatternEndWritingTask.h
 IFreeTypeFaceExtender.h
 IndirectObjectsReferenceRegistry.h
 InfoDictionary.h
-InputAESDecodeStream.h
 InputAscii85DecodeStream.h
 InputAsciiHexDecodeStream.h
 InputBufferedStream.h
@@ -279,7 +288,6 @@ ObjectsContext.h
 ObjectsContextExtenderAdapter.h
 OpenTypeFileInput.h
 OpenTypePrimitiveReader.h
-OutputAESEncodeStream.h
 OutputBufferedStream.h
 OutputFile.h
 OutputFileStream.h
@@ -482,30 +490,31 @@ RC4.cpp
 RC4.h
 )
 
-source_group(Infrastructure\\Encryption\\AES FILES
-aes_modes.c
-aes_ni.c
-aescrypt.c
-aeskey.c
-aestab.c
-aes.h
-aes_ni.h
-aes_via_ace.h
-aescpp.h
-aesopt.h
-aestab.h
-brg_endian.h
-brg_types.h
-)
+if(NOT PDFHUMMUS_NO_AES)
+    source_group(Infrastructure\\Encryption\\AES FILES
+    aes_modes.c
+    aes_ni.c
+    aescrypt.c
+    aeskey.c
+    aestab.c
+    aes.h
+    aes_ni.h
+    aes_via_ace.h
+    aescpp.h
+    aesopt.h
+    aestab.h
+    brg_endian.h
+    brg_types.h
+    )
+endif(NOT PDFHUMMUS_NO_AES)
 
 source_group(Infrastructure\\IO FILES
+#{aesSources}
 AdapterIByteReaderWithPositionToIReadPositionProvider.h
 IByteReader.h
 IByteReaderWithPosition.h
 IByteWriter.h
 IByteWriterWithPosition.h
-InputAESDecodeStream.cpp
-InputAESDecodeStream.h
 InputAscii85DecodeStream.cpp
 InputAscii85DecodeStream.h
 InputAsciiHexDecodeStream.cpp
@@ -534,8 +543,6 @@ InputStringStream.cpp
 InputStringStream.h
 IOBasicTypes.h
 IReadPositionProvider.h
-OutputAESEncodeStream.cpp
-OutputAESEncodeStream.h
 OutputBufferedStream.cpp
 OutputBufferedStream.h
 OutputFile.cpp

@@ -52,14 +52,16 @@ if(NOT USE_BUNDLED)
 
     PKG_CHECK_MODULES(FREETYPE REQUIRED freetype2)
 
-    if (MINGW OR FLATPAK)
-        # FIXME: Fedora's MinGW environment doesn't provide LibAesgm
-        # FIXME: Flatpak's Gnome runtime doesn't provide LibAesgm
-        ADD_SUBDIRECTORY (LibAesgm)
-    else (MINGW OR FLATPAK)
-        FIND_PATH(LIBAESGM_INCLUDE_DIRS aescpp.h /usr/local/include/aes /usr/include/aes)
-        FIND_LIBRARY(LIBAESGM_LDFLAGS NAMES aesgm PATHS /usr/local/lib${LIB_SUFFIX} /usr/lib${LIB_SUFFIX})
-    endif (MINGW OR FLATPAK)
+    if(NOT PDFHUMMUS_NO_AES)
+        if (MINGW OR FLATPAK)
+            # FIXME: Fedora's MinGW environment doesn't provide LibAesgm
+            # FIXME: Flatpak's Gnome runtime doesn't provide LibAesgm
+            ADD_SUBDIRECTORY (LibAesgm)
+        else (MINGW OR FLATPAK)
+            FIND_PATH(LIBAESGM_INCLUDE_DIRS aescpp.h /usr/local/include/aes /usr/include/aes)
+            FIND_LIBRARY(LIBAESGM_LDFLAGS NAMES aesgm PATHS /usr/local/lib${LIB_SUFFIX} /usr/lib${LIB_SUFFIX})
+        endif (MINGW OR FLATPAK)
+    endif(NOT PDFHUMMUS_NO_AES)
 
     PKG_CHECK_MODULES(LIBPNG libpng)
     if(NOT LIBPNG_FOUND)
@@ -67,7 +69,9 @@ if(NOT USE_BUNDLED)
     endif(NOT LIBPNG_FOUND)
 
 else(NOT USE_BUNDLED)
+    if(NOT PDFHUMMUS_NO_AES)
     ADD_SUBDIRECTORY(LibAesgm)
+    endif(NOT PDFHUMMUS_NO_AES)
     if(NOT PDFHUMMUS_NO_DCT)
     ADD_SUBDIRECTORY(LibJpeg)
     endif(NOT PDFHUMMUS_NO_DCT)
