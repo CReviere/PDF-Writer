@@ -1,3 +1,7 @@
+# Build folders
+build32
+build64
+
 #all the binaries
 BUILD
 # Compiled source #
