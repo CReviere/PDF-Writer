@@ -38,6 +38,10 @@ endif(UNICODE_CHARSET)
 
 set(USE_BUNDLED TRUE CACHE BOOL "Whether to use bundled libraries")
 
+if(CMAKE_GENERATOR STREQUAL "Xcode")
+    set(IS_XCODE TRUE)
+endif(CMAKE_GENERATOR STREQUAL "Xcode")
+
 if(NOT USE_BUNDLED)
     FIND_PACKAGE(PkgConfig)
 
