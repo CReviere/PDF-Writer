@@ -11,6 +11,9 @@ if exist "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxi
 if exist "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\VC\Auxiliary\Build\vcvarsall.bat" (
   set vcvars="C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\VC\Auxiliary\Build\vcvarsall.bat"
 )
+if exist "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" (
+  set vcvars="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat"
+)
 
 if not defined logfile set logfile=..\build.log
 if exist %logfile% del %logfile%
